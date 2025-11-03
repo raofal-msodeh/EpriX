@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام تغليف الملفات المتقدم</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6C63FF;
+            --primary-dark: #5A52E0;
+            --primary-light: #8B85FF;
+            --secondary: #FF6584;
+            --success: #36D1DC;
+            --warning: #FFB347;
+            --danger: #FF6B6B;
+            --dark: #2D3748;
+            --darker: #1A202C;
+            --light: #F7FAFC;
+            --gray: #A0AEC0;
+            --gradient-primary: linear-gradient(135deg, #6C63FF 0%, #8B85FF 100%);
+            --gradient-secondary: linear-gradient(135deg, #FF6584 0%, #FF8E9E 100%);
+            --gradient-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --border-radius: 16px;
+            --border-radius-lg: 24px;
+            --box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            --box-shadow-lg: 0 25px 50px rgba(0, 0, 0, 0.15);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: var(--gradient-bg);
+            color: var(--light);
+            line-height: 1.7;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: var(--box-shadow-lg);
+            padding: 40px;
+            margin-bottom: 30px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.3);
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            color: white;
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(to right, #fff, #e0e7ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 15px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-light);
+            font-size: 1.2rem;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 16px 20px 16px 55px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: var(--transition);
+            color: white;
+        }
+
+        input[type="text"]::placeholder,
+        input[type="password"]::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: var(--primary-light);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.2);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .checkbox-group:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .checkbox-group input {
+            margin-left: 15px;
+            width: 22px;
+            height: 22px;
+            accent-color: var(--primary);
+        }
+
+        .checkbox-group label {
+            margin-bottom: 0;
+            cursor: pointer;
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .checkbox-desc {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 3px;
+            font-weight: normal;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient-primary);
+            color: white;
+            padding: 18px 30px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            width: 100%;
+            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(108, 99, 255, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(-2px);
+        }
+
+        .btn i {
+            margin-left: 10px;
+            font-size: 1.2rem;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(255, 255, 255, 0.2), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .btn:hover::after {
+            opacity: 1;
+        }
+
+        .response {
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            display: none;
+            animation: fadeIn 0.5s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .success {
+            background: rgba(54, 209, 220, 0.15);
+            border: 1px solid rgba(54, 209, 220, 0.3);
+            color: #C0FDFF;
+        }
+
+        .error {
+            background: rgba(255, 107, 107, 0.15);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            color: #FFD1D1;
+        }
+
+        .response-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .response-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 15px;
+            font-size: 1.2rem;
+        }
+
+        .success .response-icon {
+            background: rgba(54, 209, 220, 0.3);
+        }
+
+        .error .response-icon {
+            background: rgba(255, 107, 107, 0.3);
+        }
+
+        .response h3 {
+            margin-bottom: 0;
+            font-size: 1.3rem;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        .required::after {
+            content: " *";
+            color: var(--danger);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-left-color: white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: var(--gradient-primary);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        /* تصميم متجاوب */
+        @media (max-width: 768px) {
+            .glass-card {
+                padding: 25px;
+            }
+            
+            header h1 {
+                font-size: 2.2rem;
+            }
+            
+            header p {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            body {
+                padding: 15px;
+            }
+            
+            .glass-card {
+                padding: 20px;
+            }
+            
+            header h1 {
+                font-size: 1.9rem;
+            }
+            
+            header p {
+                font-size: 1rem;
+            }
+            
+            input[type="text"],
+            input[type="password"] {
+                padding: 14px 15px 14px 50px;
+            }
+            
+            .btn {
+                padding: 16px 20px;
+            }
+        }
+
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            border-radius: 50%;
+            background: var(--primary-light);
+            animation: float 15s infinite linear;
+        }
+
+        .shape:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 70%;
+            left: 80%;
+            animation-delay: -5s;
+        }
+
+        .shape:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            top: 50%;
+            left: 20%;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            33% {
+                transform: translate(30px, -50px) rotate(120deg);
+            }
+            66% {
+                transform: translate(-20px, 20px) rotate(240deg);
+            }
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-file-archive"></i>
+            </div>
+            <h1>نظام تغليف الملفات المتقدم</h1>
+            <p>أداة متطورة لتغليف الملفات والمجلدات مع تشفير آمن وفائق</p>
+        </header>
+
+        <main>
+            <div class="glass-card">
+                <h2 style="margin-bottom: 25px; text-align: center; color: white;">إعدادات التغليف</h2>
+                
+                <form id="packForm">
+                    <div class="form-group">
+                        <label for="source_dir" class="required">المسار إلى المجلد المصدر</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-folder-open input-icon"></i>
+                            <input type="text" id="source_dir" name="source_dir" required placeholder="مثال: /home/user/documents">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="output_file">اسم ملف الإخراج</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-file-export input-icon"></i>
+                            <input type="text" id="output_file" name="output_file" placeholder="archive.epr">
+                        </div>
+                        <small style="color: rgba(255, 255, 255, 0.6); display: block; margin-top: 8px;">إذا لم يتم تحديده، سيتم استخدام archive.epr</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="keys_file">اسم ملف المفاتيح</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-key input-icon"></i>
+                            <input type="text" id="keys_file" name="keys_file" placeholder="keys.json">
+                        </div>
+                        <small style="color: rgba(255, 255, 255, 0.6); display: block; margin-top: 8px;">إذا لم يتم تحديده، سيتم استخدام keys.json</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="passphrase" class="required">كلمة المرور للتشفير</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" id="passphrase" name="passphrase" required placeholder="أدخل كلمة مرور قوية">
+                        </div>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="follow_symlinks" name="follow_symlinks">
+                        <label for="follow_symlinks">
+                            <div class="checkbox-text">
+                                <span>متابعة الروابط الرمزية</span>
+                                <span class="checkbox-desc">إذا تم تفعيله، سيتم تضمين الملفات التي تشير إليها الروابط الرمزية</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="preserve_perms" name="preserve_perms" checked>
+                        <label for="preserve_perms">
+                            <div class="checkbox-text">
+                                <span>الحفاظ على الصلاحيات</span>
+                                <span class="checkbox-desc">الحفاظ على أذونات الملفات والمجلدات الأصلية</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="include_binaries" name="include_binaries">
+                        <label for="include_binaries">
+                            <div class="checkbox-text">
+                                <span>تضمين الملفات الثنائية</span>
+                                <span class="checkbox-desc">تضمين الملفات التنفيذية والثنائية في الأرشيف</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn">
+                        <i class="fas fa-play-circle"></i>
+                        بدء عملية التغليف
+                    </button>
+                </form>
+
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>جاري معالجة طلبك، الرجاء الانتظار...</p>
+                    <div class="progress-bar">
+                        <div class="progress" id="progress"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="response success" id="successResponse">
+                <div class="response-header">
+                    <div class="response-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <h3>تم بدء عملية التغليف بنجاح</h3>
+                </div>
+                <p id="successMessage"></p>
+                <p style="margin-top: 15px;"><strong>معرف العملية:</strong> <span id="operationId"></span></p>
+            </div>
+
+            <div class="response error" id="errorResponse">
+                <div class="response-header">
+                    <div class="response-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h3>حدث خطأ</h3>
+                </div>
+                <p id="errorDetail"></p>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>© 2023 نظام تغليف الملفات المتقدم. جميع الحقوق محفوظة.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById('packForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // إظهار مؤشر التحميل
+            document.getElementById('loading').style.display = 'flex';
+            document.getElementById('successResponse').style.display = 'none';
+            document.getElementById('errorResponse').style.display = 'none';
+            
+            // محاكاة شريط التقدم
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += 5;
+                document.getElementById('progress').style.width = `${progress}%`;
+                if (progress >= 90) clearInterval(progressInterval);
+            }, 200);
+            
+            try {
+                // جمع البيانات من النموذج
+                const formData = new FormData();
+                formData.append('source_dir', document.getElementById('source_dir').value);
+                formData.append('passphrase', document.getElementById('passphrase').value);
+                
+                // إضافة الحقول الاختيارية إذا كانت موجودة
+                const outputFile = document.getElementById('output_file').value;
+                if (outputFile) formData.append('output_file', outputFile);
+                
+                const keysFile = document.getElementById('keys_file').value;
+                if (keysFile) formData.append('keys_file', keysFile);
+                
+                formData.append('follow_symlinks', document.getElementById('follow_symlinks').checked);
+                formData.append('preserve_perms', document.getElementById('preserve_perms').checked);
+                formData.append('include_binaries', document.getElementById('include_binaries').checked);
+                
+                // إرسال الطلب إلى API
+                const response = await fetch('/api/v1/pack', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                // إكمال شريط التقدم
+                document.getElementById('progress').style.width = '100%';
+                
+                // إخفاء مؤشر التحميل بعد تأخير بسيط
+                setTimeout(() => {
+                    document.getElementById('loading').style.display = 'none';
+                }, 500);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('successMessage').textContent = data.message;
+                    document.getElementById('operationId').textContent = data.operation_id;
+                    document.getElementById('successResponse').style.display = 'block';
+                } else {
+                    let errorDetail = 'حدث خطأ غير معروف';
+                    
+                    try {
+                        const errorData = await response.json();
+                        errorDetail = errorData.detail || 'حدث خطأ في الخادم';
+                    } catch (e) {
+                        if (response.status === 400) {
+                            errorDetail = 'طلب غير صالح - تحقق من البيانات المدخلة';
+                        } else if (response.status === 500) {
+                            errorDetail = 'خطأ داخلي في الخادم';
+                        } else {
+                            errorDetail = `خطأ: ${response.status}`;
+                        }
+                    }
+                    
+                    document.getElementById('errorDetail').textContent = errorDetail;
+                    document.getElementById('errorResponse').style.display = 'block';
+                }
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('errorDetail').textContent = 'فشل في الاتصال بالخادم: ' + error.message;
+                document.getElementById('errorResponse').style.display = 'block';
+            } finally {
+                clearInterval(progressInterval);
+            }
+        });
+    </script>
+</body>
+</html>

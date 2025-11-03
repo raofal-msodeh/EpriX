@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EpriX</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #667eea;
+            --primary-dark: #5a6fd8;
+            --primary-light: #7689ed;
+            --secondary: #764ba2;
+            --success: #4CD97B;
+            --warning: #FFB347;
+            --danger: #FF6B6B;
+            --info: #36D1DC;
+            --dark: #2D3748;
+            --darker: #1A202C;
+            --light: #F7FAFC;
+            --gray: #A0AEC0;
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-success: linear-gradient(135deg, #4CD97B 0%, #67E68C 100%);
+            --gradient-warning: linear-gradient(135deg, #FFB347 0%, #FFCC7F 100%);
+            --gradient-info: linear-gradient(135deg, #36D1DC 0%, #5B86E5 100%);
+            --gradient-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --border-radius: 16px;
+            --border-radius-lg: 24px;
+            --box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            --box-shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.15);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: var(--gradient-bg);
+            color: var(--light);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* الشريط العلوي */
+        .navbar {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius-lg);
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon i {
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .logo-text h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #fff, #e0e7ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo-text p {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.8);
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.active {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        /* المحتوى الرئيسي */
+        .hero-section {
+            text-align: center;
+            padding: 60px 20px;
+            margin-bottom: 40px;
+        }
+
+        .hero-section h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #fff, #e0e7ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero-section p {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 32px;
+            border-radius: var(--border-radius);
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: var(--transition);
+            gap: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+        }
+
+        /* بطاقات الميزات */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius-lg);
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--box-shadow-lg);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .feature-pack {
+            background: var(--gradient-primary);
+        }
+
+        .feature-unpack {
+            background: var(--gradient-secondary);
+        }
+
+        .feature-upload {
+            background: var(--gradient-success);
+        }
+
+        .feature-status {
+            background: var(--gradient-info);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .feature-card p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 20px;
+        }
+
+        .feature-link {
+            display: inline-flex;
+            align-items: center;
+            color: var(--primary-light);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .feature-link:hover {
+            color: white;
+            transform: translateX(-5px);
+        }
+
+        /* إحصائيات سريعة */
+        .stats-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius-lg);
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stats-section h2 {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1rem;
+        }
+
+        /* العمليات الحديثة */
+        .recent-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius-lg);
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            color: white;
+        }
+
+        .view-all {
+            color: var(--primary-light);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .view-all:hover {
+            color: white;
+        }
+
+        .operations-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .operations-table th {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px 20px;
+            text-align: right;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .operations-table td {
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--transition);
+        }
+
+        .operations-table tr:hover td {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-completed {
+            background: var(--gradient-success);
+            color: white;
+        }
+
+        .status-processing {
+            background: var(--gradient-info);
+            color: white;
+        }
+
+        .status-failed {
+            background: var(--gradient-secondary);
+            color: white;
+        }
+
+        /* الفوتر */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: rgba(255, 255, 255, 0.6);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-link:hover {
+            color: white;
+        }
+
+        /* تصميم متجاوب */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero-section h2 {
+                font-size: 2.2rem;
+            }
+
+            .hero-section p {
+                font-size: 1.1rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .operations-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .container {
+                padding: 15px;
+            }
+
+            .hero-section {
+                padding: 40px 15px;
+            }
+
+            .hero-section h2 {
+                font-size: 1.8rem;
+            }
+
+            .feature-card {
+                padding: 20px;
+            }
+
+            .stats-section,
+            .recent-section {
+                padding: 25px;
+            }
+        }
+
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            border-radius: 50%;
+            background: var(--primary-light);
+            animation: float 20s infinite linear;
+        }
+
+        .shape:nth-child(1) {
+            width: 100px;
+            height: 100px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 150px;
+            height: 150px;
+            top: 70%;
+            left: 80%;
+            animation-delay: -7s;
+        }
+
+        .shape:nth-child(3) {
+            width: 80px;
+            height: 80px;
+            top: 50%;
+            left: 20%;
+            animation-delay: -14s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            33% {
+                transform: translate(40px, -60px) rotate(120deg);
+            }
+            66% {
+                transform: translate(-30px, 40px) rotate(240deg);
+            }
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+            }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <div class="container">
+        <!-- الشريط العلوي -->
+        <nav class="navbar">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>EpriX</h1>
+                    <p>حل متكامل لإدارة الملفات المشفرة</p>
+                </div>
+            </div>
+            <div class="nav-links">
+                <a href="/operations" class="nav-btn">
+                    <i class="fas fa-tachometer-alt"></i>
+                    لوحة التحكم
+                </a>
+                <a href="/status" class="nav-btn">
+                    <i class="fas fa-chart-bar"></i>
+                    حالة العمليات
+                </a>
+            </div>
+        </nav>
+
+        <!-- قسم البطل -->
+        <section class="hero-section">
+            <h2>نظام متكامل لإدارة الأرشيفات المشفرة</h2>
+            <p>أداة متطورة لتغليف وفك تغليف الملفات مع تشفير آمن وفائق الحماية. إدارة كاملة للعمليات وتتبع في الوقت الفعلي.</p>
+            <div class="cta-buttons">
+                <a href="/pack" class="btn btn-primary">
+                    <i class="fas fa-file-archive"></i>
+                    بدء التغليف
+                </a>
+                <a href="/unpack" class="btn btn-secondary">
+                    <i class="fas fa-file-export"></i>
+                    فك التغليف
+                </a>
+            </div>
+        </section>
+
+        <!-- ميزات النظام -->
+        <section class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon feature-pack">
+                    <i class="fas fa-file-archive"></i>
+                </div>
+                <h3>تغليف الملفات</h3>
+                <p>تغليف الملفات والمجلدات من الخادم مع تشفير متقدم وحماية بكلمة مرور. دعم للخيارات المتقدمة مثل الحفاظ على الصلاحيات والروابط الرمزية.</p>
+                <a href="/pack" class="feature-link">
+                    ابدأ التغليف
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon feature-upload">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <h3>رفع وتغليف</h3>
+                <p>رفع الملفات مباشرة من جهازك وتغليفها فوراً. دعم لرفع multiple files مع خيارات متقدمة للتشفير والإعدادات.</p>
+                <a href="/pack/upload" class="feature-link">
+                    رفع وتغليف
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon feature-unpack">
+                    <i class="fas fa-file-export"></i>
+                </div>
+                <h3>فك التغليف</h3>
+                <p>فك تغليف الأرشيفات الموجودة على الخادم باستخدام المفاتيح وكلمة المرور. دعم للاستخراج إلى مجلدات مخصصة مع خيارات الكتابة فوق الملفات.</p>
+                <a href="/unpack" class="feature-link">
+                    فك التغليف
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon feature-upload">
+                    <i class="fas fa-file-download"></i>
+                </div>
+                <h3>رفع وفك التغليف</h3>
+                <p>رفع الأرشيفات والمفاتيح مباشرة من جهازك وفك تغليفها فوراً. تحقق من صحة الملفات ومعالجة آمنة للبيانات المشفرة.</p>
+                <a href="/unpack/upload" class="feature-link">
+                    رفع وفك التغليف
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon feature-status">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>متابعة العمليات</h3>
+                <p>تتبع حالة جميع العمليات في الوقت الفعلي. عرض التفاصيل الكاملة للإنجاز والأخطاء مع تحديث تلقائي للبيانات.</p>
+                <a href="/status" class="feature-link">
+                    عرض الحالة
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon feature-pack">
+                    <i class="fas fa-list-alt"></i>
+                </div>
+                <h3>قائمة العمليات</h3>
+                <p>عرض كامل لقائمة جميع العمليات مع إمكانية التصفية والبحث. إحصائيات مفصلة وأدوات لإدارة العمليات.</p>
+                <a href="/operations" class="feature-link">
+                    عرض القائمة
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+            </div>
+        </section>
+
+        <!-- إحصائيات سريعة -->
+        <section class="stats-section">
+            <h2>إحصائيات النظام</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalOperations">0</div>
+                    <div class="stat-label">إجمالي العمليات</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="completedOperations">0</div>
+                    <div class="stat-label">عمليات مكتملة</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="processingOperations">0</div>
+                    <div class="stat-label">قيد المعالجة</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="failedOperations">0</div>
+                    <div class="stat-label">عمليات فاشلة</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- العمليات الحديثة -->
+        <section class="recent-section">
+            <div class="section-header">
+                <h2>أحدث العمليات</h2>
+                <a href="/operations" class="view-all">عرض الكل</a>
+            </div>
+            <div class="operations-container">
+                <table class="operations-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 30%;">معرّف العملية</th>
+                            <th style="width: 20%;">النوع</th>
+                            <th style="width: 20%;">الحالة</th>
+                            <th style="width: 30%;">الوقت</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentOperations">
+                        <!-- سيتم ملء البيانات ديناميكياً -->
+                    </tbody>
+                </table>
+                <div class="empty-state" id="emptyOperations" style="display: none;">
+                    <div class="empty-icon">
+                        <i class="fas fa-inbox"></i>
+                    </div>
+                    <h3>لا توجد عمليات حديثة</h3>
+                    <p>لم يتم تنفيذ أي عمليات بعد</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- الفوتر -->
+        <footer class="footer">
+            <div class="footer-links">
+                <a href="/pack" class="footer-link">تغليف الملفات</a>
+                <a href="/pack/upload" class="footer-link">رفع وتغليف</a>
+                <a href="/unpack" class="footer-link">فك التغليف</a>
+                <a href="/unpack/upload" class="footer-link">رفع وفك التغليف</a>
+                <a href="/status" class="footer-link">حالة العمليات</a>
+                <a href="/operations" class="footer-link">قائمة العمليات</a>
+            </div>
+            <p>© 2023 نظام الأرشيفات المشفرة. جميع الحقوق محفوظة.</p>
+        </footer>
+    </div>
+
+    <script>
+        // تحميل البيانات عند فتح الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboardData();
+        });
+
+        async function loadDashboardData() {
+            try {
+                // تحميل قائمة العمليات
+                const response = await fetch('/api/v1/operations');
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    updateDashboard(data.operations || []);
+                } else {
+                    throw new Error('فشل في تحميل البيانات');
+                }
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+                showEmptyState();
+            }
+        }
+
+        function updateDashboard(operations) {
+            updateStats(operations);
+            updateRecentOperations(operations);
+        }
+
+        function updateStats(operations) {
+            const total = operations.length;
+            const completed = operations.filter(op => op.status === 'completed').length;
+            const processing = operations.filter(op => op.status === 'processing').length;
+            const failed = operations.filter(op => op.status === 'failed').length;
+
+            document.getElementById('totalOperations').textContent = total;
+            document.getElementById('completedOperations').textContent = completed;
+            document.getElementById('processingOperations').textContent = processing;
+            document.getElementById('failedOperations').textContent = failed;
+        }
+
+        function updateRecentOperations(operations) {
+            const tbody = document.getElementById('recentOperations');
+            const emptyState = document.getElementById('emptyOperations');
+
+            // أخذ آخر 5 عمليات
+            const recentOps = operations.slice(0, 5);
+
+            if (recentOps.length === 0) {
+                tbody.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+
+            tbody.innerHTML = recentOps.map(operation => `
+                <tr>
+                    <td>
+                        <div style="font-family: 'Courier New', monospace; font-size: 0.85rem;">
+                            ${operation.id.substring(0, 8)}...
+                        </div>
+                    </td>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <i class="fas ${getOperationIcon(operation.type)}"></i>
+                            ${getOperationTypeText(operation.type)}
+                        </div>
+                    </td>
+                    <td>
+                        <span class="status-badge status-${operation.status}">
+                            <i class="fas ${getStatusIcon(operation.status)}"></i>
+                            ${getStatusText(operation.status)}
+                        </span>
+                    </td>
+                    <td>
+                        <div style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem;">
+                            ${new Date().toLocaleString('ar-SA')}
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function getOperationTypeText(type) {
+            const types = {
+                'pack': 'تغليف',
+                'unpack': 'فك التغليف',
+                'pack_upload': 'رفع وتغليف',
+                'unpack_upload': 'رفع وفك'
+            };
+            return types[type] || type;
+        }
+
+        function getOperationIcon(type) {
+            const icons = {
+                'pack': 'fa-file-archive',
+                'unpack': 'fa-file-export',
+                'pack_upload': 'fa-cloud-upload-alt',
+                'unpack_upload': 'fa-file-download'
+            };
+            return icons[type] || 'fa-file';
+        }
+
+        function getStatusText(status) {
+            const statuses = {
+                'completed': 'مكتمل',
+                'processing': 'قيد المعالجة',
+                'failed': 'فشل'
+            };
+            return statuses[status] || status;
+        }
+
+        function getStatusIcon(status) {
+            const icons = {
+                'completed': 'fa-check',
+                'processing': 'fa-sync-alt',
+                'failed': 'fa-exclamation-triangle'
+            };
+            return icons[status] || 'fa-question';
+        }
+
+        function showEmptyState() {
+            document.getElementById('totalOperations').textContent = '0';
+            document.getElementById('completedOperations').textContent = '0';
+            document.getElementById('processingOperations').textContent = '0';
+            document.getElementById('failedOperations').textContent = '0';
+            document.getElementById('emptyOperations').style.display = 'block';
+        }
+
+        // تحديث البيانات كل 30 ثانية
+        setInterval(loadDashboardData, 30000);
+    </script>
+</body>
+</html>

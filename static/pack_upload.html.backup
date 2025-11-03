@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام رفع وتغليف الملفات المتقدم</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6C63FF;
+            --primary-dark: #5A52E0;
+            --primary-light: #8B85FF;
+            --secondary: #FF6584;
+            --success: #36D1DC;
+            --warning: #FFB347;
+            --danger: #FF6B6B;
+            --dark: #2D3748;
+            --darker: #1A202C;
+            --light: #F7FAFC;
+            --gray: #A0AEC0;
+            --gradient-primary: linear-gradient(135deg, #6C63FF 0%, #8B85FF 100%);
+            --gradient-secondary: linear-gradient(135deg, #FF6584 0%, #FF8E9E 100%);
+            --gradient-success: linear-gradient(135deg, #36D1DC 0%, #5B86E5 100%);
+            --gradient-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --border-radius: 16px;
+            --border-radius-lg: 24px;
+            --box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            --box-shadow-lg: 0 25px 50px rgba(0, 0, 0, 0.15);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: var(--gradient-bg);
+            color: var(--light);
+            line-height: 1.7;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 950px;
+            margin: 0 auto;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: var(--box-shadow-lg);
+            padding: 40px;
+            margin-bottom: 30px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 10px 20px rgba(54, 209, 220, 0.3);
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            color: white;
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(to right, #fff, #e0e7ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 15px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-light);
+            font-size: 1.2rem;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 16px 20px 16px 55px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: var(--transition);
+            color: white;
+        }
+
+        input[type="text"]::placeholder,
+        input[type="password"]::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: var(--primary-light);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.2);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .checkbox-group:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .checkbox-group input {
+            margin-left: 15px;
+            width: 22px;
+            height: 22px;
+            accent-color: var(--primary);
+        }
+
+        .checkbox-group label {
+            margin-bottom: 0;
+            cursor: pointer;
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .checkbox-desc {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 3px;
+            font-weight: normal;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient-success);
+            color: white;
+            padding: 18px 30px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            width: 100%;
+            box-shadow: 0 10px 20px rgba(54, 209, 220, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(54, 209, 220, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(-2px);
+        }
+
+        .btn i {
+            margin-left: 10px;
+            font-size: 1.2rem;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(255, 255, 255, 0.2), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .btn:hover::after {
+            opacity: 1;
+        }
+
+        /* منطقة رفع الملفات */
+        .upload-area {
+            border: 3px dashed rgba(255, 255, 255, 0.3);
+            border-radius: var(--border-radius);
+            padding: 40px 20px;
+            text-align: center;
+            transition: var(--transition);
+            background: rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary-light);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .upload-area.active {
+            border-color: var(--success);
+            background: rgba(54, 209, 220, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 20px;
+            transition: var(--transition);
+        }
+
+        .upload-area:hover .upload-icon {
+            color: var(--primary-light);
+            transform: translateY(-5px);
+        }
+
+        .upload-text h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .upload-text p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 15px;
+        }
+
+        .browse-btn {
+            display: inline-flex;
+            align-items: center;
+            background: var(--gradient-primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .browse-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108, 99, 255, 0.3);
+        }
+
+        .file-input {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        /* قائمة الملفات */
+        .file-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: var(--border-radius);
+            margin-bottom: 10px;
+            transition: var(--transition);
+        }
+
+        .file-item:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateX(-5px);
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+
+        .file-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 15px;
+        }
+
+        .file-icon i {
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .file-details {
+            flex: 1;
+        }
+
+        .file-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: white;
+        }
+
+        .file-size {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .file-remove {
+            background: rgba(255, 107, 107, 0.2);
+            border: none;
+            color: var(--danger);
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .file-remove:hover {
+            background: rgba(255, 107, 107, 0.3);
+            transform: scale(1.1);
+        }
+
+        .response {
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            display: none;
+            animation: fadeIn 0.5s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .success {
+            background: rgba(54, 209, 220, 0.15);
+            border: 1px solid rgba(54, 209, 220, 0.3);
+            color: #C0FDFF;
+        }
+
+        .error {
+            background: rgba(255, 107, 107, 0.15);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            color: #FFD1D1;
+        }
+
+        .response-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .response-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 15px;
+            font-size: 1.2rem;
+        }
+
+        .success .response-icon {
+            background: rgba(54, 209, 220, 0.3);
+        }
+
+        .error .response-icon {
+            background: rgba(255, 107, 107, 0.3);
+        }
+
+        .response h3 {
+            margin-bottom: 0;
+            font-size: 1.3rem;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        .required::after {
+            content: " *";
+            color: var(--danger);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-left-color: white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: var(--gradient-success);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        /* تصميم متجاوب */
+        @media (max-width: 768px) {
+            .glass-card {
+                padding: 25px;
+            }
+            
+            header h1 {
+                font-size: 2.2rem;
+            }
+            
+            header p {
+                font-size: 1.1rem;
+            }
+            
+            .upload-area {
+                padding: 30px 15px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            body {
+                padding: 15px;
+            }
+            
+            .glass-card {
+                padding: 20px;
+            }
+            
+            header h1 {
+                font-size: 1.9rem;
+            }
+            
+            header p {
+                font-size: 1rem;
+            }
+            
+            input[type="text"],
+            input[type="password"] {
+                padding: 14px 15px 14px 50px;
+            }
+            
+            .btn {
+                padding: 16px 20px;
+            }
+            
+            .file-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .file-remove {
+                align-self: flex-end;
+                margin-top: 10px;
+            }
+        }
+
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            border-radius: 50%;
+            background: var(--primary-light);
+            animation: float 15s infinite linear;
+        }
+
+        .shape:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 70%;
+            left: 80%;
+            animation-delay: -5s;
+        }
+
+        .shape:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            top: 50%;
+            left: 20%;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            33% {
+                transform: translate(30px, -50px) rotate(120deg);
+            }
+            66% {
+                transform: translate(-20px, 20px) rotate(240deg);
+            }
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+            }
+        }
+
+        .file-count {
+            margin-top: 15px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-cloud-upload-alt"></i>
+            </div>
+            <h1>نظام رفع وتغليف الملفات</h1>
+            <p>رفع آمن وتغليف للملفات مع تشفير متقدم وحماية فائقة</p>
+        </header>
+
+        <main>
+            <div class="glass-card">
+                <h2 style="margin-bottom: 25px; text-align: center; color: white;">رفع الملفات وتغليفها</h2>
+                
+                <form id="uploadPackForm">
+                    <!-- منطقة رفع الملفات -->
+                    <div class="form-group">
+                        <label for="files" class="required">الملفات المطلوب رفعها</label>
+                        <div class="upload-area" id="uploadArea">
+                            <div class="upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <div class="upload-text">
+                                <h3>اسحب وأفلت الملفات هنا</h3>
+                                <p>أو انقر لاختيار الملفات</p>
+                                <div class="browse-btn">
+                                    <i class="fas fa-folder-open"></i>
+                                    استعرض الملفات
+                                </div>
+                            </div>
+                            <input type="file" id="files" name="files" class="file-input" multiple required>
+                        </div>
+                        <div class="file-count" id="fileCount">لم يتم اختيار أي ملفات بعد</div>
+                        
+                        <!-- قائمة الملفات المختارة -->
+                        <div class="file-list" id="fileList"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="output_file">اسم ملف الإخراج</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-file-export input-icon"></i>
+                            <input type="text" id="output_file" name="output_file" placeholder="upload_archive.epr">
+                        </div>
+                        <small style="color: rgba(255, 255, 255, 0.6); display: block; margin-top: 8px;">إذا لم يتم تحديده، سيتم إنشاء اسم تلقائي</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="keys_file">اسم ملف المفاتيح</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-key input-icon"></i>
+                            <input type="text" id="keys_file" name="keys_file" placeholder="keys.json">
+                        </div>
+                        <small style="color: rgba(255, 255, 255, 0.6); display: block; margin-top: 8px;">إذا لم يتم تحديده، سيتم استخدام keys.json</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="passphrase" class="required">كلمة المرور للتشفير</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" id="passphrase" name="passphrase" required placeholder="أدخل كلمة مرور قوية">
+                        </div>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="include_binaries" name="include_binaries">
+                        <label for="include_binaries">
+                            <div class="checkbox-text">
+                                <span>تضمين الملفات الثنائية</span>
+                                <span class="checkbox-desc">تضمين الملفات التنفيذية والثنائية في الأرشيف</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn">
+                        <i class="fas fa-file-archive"></i>
+                        رفع الملفات وتغليفها
+                    </button>
+                </form>
+
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>جاري رفع الملفات وتغليفها، الرجاء الانتظار...</p>
+                    <div class="progress-bar">
+                        <div class="progress" id="progress"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="response success" id="successResponse">
+                <div class="response-header">
+                    <div class="response-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <h3>تم بدء عملية التغليف بنجاح</h3>
+                </div>
+                <p id="successMessage"></p>
+                <p style="margin-top: 15px;"><strong>معرف العملية:</strong> <span id="operationId"></span></p>
+            </div>
+
+            <div class="response error" id="errorResponse">
+                <div class="response-header">
+                    <div class="response-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h3>حدث خطأ</h3>
+                </div>
+                <p id="errorDetail"></p>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>© 2023 نظام رفع وتغليف الملفات المتقدم. جميع الحقوق محفوظة.</p>
+        </footer>
+    </div>
+
+    <script>
+        // إدارة رفع الملفات
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('files');
+        const fileList = document.getElementById('fileList');
+        const fileCount = document.getElementById('fileCount');
+        let selectedFiles = [];
+
+        // أحداث سحب وإفلات الملفات
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('active');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('active');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('active');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        // معالجة الملفات المختارة
+        function handleFiles(files) {
+            selectedFiles = Array.from(files);
+            updateFileList();
+            updateFileCount();
+        }
+
+        // تحديث قائمة الملفات المعروضة
+        function updateFileList() {
+            fileList.innerHTML = '';
+            
+            selectedFiles.forEach((file, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                
+                const fileSize = formatFileSize(file.size);
+                const fileExtension = getFileExtension(file.name);
+                const fileIcon = getFileIcon(fileExtension);
+                
+                fileItem.innerHTML = `
+                    <div class="file-info">
+                        <div class="file-icon">
+                            <i class="${fileIcon}"></i>
+                        </div>
+                        <div class="file-details">
+                            <div class="file-name">${file.name}</div>
+                            <div class="file-size">${fileSize}</div>
+                        </div>
+                    </div>
+                    <button type="button" class="file-remove" data-index="${index}">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                
+                fileList.appendChild(fileItem);
+            });
+            
+            // إضافة أحداث لحذف الملفات
+            document.querySelectorAll('.file-remove').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const index = parseInt(e.currentTarget.getAttribute('data-index'));
+                    selectedFiles.splice(index, 1);
+                    updateFileList();
+                    updateFileCount();
+                });
+            });
+        }
+
+        // تحديث عداد الملفات
+        function updateFileCount() {
+            const count = selectedFiles.length;
+            if (count === 0) {
+                fileCount.textContent = 'لم يتم اختيار أي ملفات بعد';
+            } else if (count === 1) {
+                fileCount.textContent = 'تم اختيار ملف واحد';
+            } else {
+                fileCount.textContent = `تم اختيار ${count} ملفات`;
+            }
+        }
+
+        // تنسيق حجم الملف
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // الحصول على امتداد الملف
+        function getFileExtension(filename) {
+            return filename.slice((filename.lastIndexOf('.') - 1 >>> 0) + 2);
+        }
+
+        // الحصول على الأيقونة المناسبة لنوع الملف
+        function getFileIcon(extension) {
+            const iconMap = {
+                'pdf': 'fas fa-file-pdf',
+                'doc': 'fas fa-file-word',
+                'docx': 'fas fa-file-word',
+                'xls': 'fas fa-file-excel',
+                'xlsx': 'fas fa-file-excel',
+                'ppt': 'fas fa-file-powerpoint',
+                'pptx': 'fas fa-file-powerpoint',
+                'zip': 'fas fa-file-archive',
+                'rar': 'fas fa-file-archive',
+                'jpg': 'fas fa-file-image',
+                'jpeg': 'fas fa-file-image',
+                'png': 'fas fa-file-image',
+                'gif': 'fas fa-file-image',
+                'txt': 'fas fa-file-alt',
+                'mp3': 'fas fa-file-audio',
+                'mp4': 'fas fa-file-video',
+                'exe': 'fas fa-cog',
+                'js': 'fab fa-js-square',
+                'html': 'fab fa-html5',
+                'css': 'fab fa-css3-alt'
+            };
+            
+            return iconMap[extension.toLowerCase()] || 'fas fa-file';
+        }
+
+        // إرسال النموذج إلى API
+        document.getElementById('uploadPackForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // التحقق من وجود ملفات
+            if (selectedFiles.length === 0) {
+                document.getElementById('errorDetail').textContent = 'يرجى اختيار ملفات للرفع';
+                document.getElementById('errorResponse').style.display = 'block';
+                return;
+            }
+            
+            // إظهار مؤشر التحميل
+            document.getElementById('loading').style.display = 'flex';
+            document.getElementById('successResponse').style.display = 'none';
+            document.getElementById('errorResponse').style.display = 'none';
+            
+            // محاكاة شريط التقدم
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += 5;
+                document.getElementById('progress').style.width = `${progress}%`;
+                if (progress >= 90) clearInterval(progressInterval);
+            }, 200);
+            
+            try {
+                // إنشاء FormData وإضافة الملفات
+                const formData = new FormData();
+                
+                // إضافة الملفات
+                selectedFiles.forEach(file => {
+                    formData.append('files', file);
+                });
+                
+                // إضافة الحقول الأخرى
+                formData.append('passphrase', document.getElementById('passphrase').value);
+                
+                const outputFile = document.getElementById('output_file').value;
+                if (outputFile) formData.append('output_file', outputFile);
+                
+                const keysFile = document.getElementById('keys_file').value;
+                if (keysFile) formData.append('keys_file', keysFile);
+                
+                formData.append('include_binaries', document.getElementById('include_binaries').checked);
+                
+                // إرسال الطلب إلى API
+                const response = await fetch('/api/v1/pack/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                // إكمال شريط التقدم
+                document.getElementById('progress').style.width = '100%';
+                
+                // إخفاء مؤشر التحميل بعد تأخير بسيط
+                setTimeout(() => {
+                    document.getElementById('loading').style.display = 'none';
+                }, 500);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('successMessage').textContent = data.message;
+                    document.getElementById('operationId').textContent = data.operation_id;
+                    document.getElementById('successResponse').style.display = 'block';
+                    
+                    // إعادة تعيين النموذج بعد النجاح
+                    setTimeout(() => {
+                        selectedFiles = [];
+                        updateFileList();
+                        updateFileCount();
+                        document.getElementById('uploadPackForm').reset();
+                    }, 3000);
+                } else {
+                    let errorDetail = 'حدث خطأ غير معروف';
+                    
+                    try {
+                        const errorData = await response.json();
+                        errorDetail = errorData.detail || 'حدث خطأ في الخادم';
+                    } catch (e) {
+                        if (response.status === 400) {
+                            errorDetail = 'طلب غير صالح - تحقق من البيانات المدخلة';
+                        } else if (response.status === 500) {
+                            errorDetail = 'خطأ داخلي في الخادم';
+                        } else {
+                            errorDetail = `خطأ: ${response.status}`;
+                        }
+                    }
+                    
+                    document.getElementById('errorDetail').textContent = errorDetail;
+                    document.getElementById('errorResponse').style.display = 'block';
+                }
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('errorDetail').textContent = 'فشل في الاتصال بالخادم: ' + error.message;
+                document.getElementById('errorResponse').style.display = 'block';
+            } finally {
+                clearInterval(progressInterval);
+            }
+        });
+    </script>
+</body>
+</html>

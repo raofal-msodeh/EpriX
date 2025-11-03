@@ -1,0 +1,19 @@
+# Core dependencies for EpriX
+# The project uses advanced features like multi-layer encryption and compression.
+
+# Web Interface Dependencies (FastAPI)
+fastapi
+uvicorn[standard]
+
+# Cryptography and Security
+cryptography
+
+# Other potential dependencies (based on common Python project practices)
+# If the project uses a specific compression library (e.g., lz4, zstd), it should be added here.
+# Assuming standard library compression (zlib, gzip) is used unless specified otherwise.
+
+# For file type detection (if external library is used)
+# python-magic (or similar)
+
+# For command-line interface (if external library is used beyond argparse)
+# click (or similar)
