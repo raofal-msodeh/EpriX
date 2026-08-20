@@ -169,7 +169,7 @@ class TestFullPipeline:
         data[len(data) // 2] ^= 0xFF
         archive.write_bytes(bytes(data))
         out = tmp_dir / "out"
-        with pytest.raises(Exception):
+        with pytest.raises(Exception):  # noqa: B017 — auth failure raises InvalidTag/InvalidSignature (no common base)
             unpack_directory(
                 input_file=archive,
                 keys_file=keys,

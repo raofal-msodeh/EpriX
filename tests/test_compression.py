@@ -32,11 +32,11 @@ class TestPostEncryptionCompression:
     def test_wrong_stage_order_raises(self):
         """Compressed data from one stage must fail when decoded with the other stage."""
         pre_compressed = compress_data(PLAIN, stage="pre-encryption")
-        with pytest.raises(Exception):
+        with pytest.raises(Exception):  # noqa: B017 — cross-stage data is rejected by decompressors
             decompress_data(pre_compressed, stage="post-encryption")
 
         post_compressed = compress_data(PLAIN, stage="post-encryption")
-        with pytest.raises(Exception):
+        with pytest.raises(Exception):  # noqa: B017 — cross-stage data is rejected by decompressors
             decompress_data(post_compressed, stage="pre-encryption")
 
 

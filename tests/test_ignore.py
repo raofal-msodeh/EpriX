@@ -1,6 +1,5 @@
 """Tests for EpriX.ignore — .eprignore pattern matching."""
 
-from pathlib import Path
 
 from EpriX.ignore import IgnoreFilter
 

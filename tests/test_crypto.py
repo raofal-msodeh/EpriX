@@ -48,7 +48,7 @@ class TestMultiLayerEncryption:
 
     def test_wrong_passphrase_raises(self):
         ciphertext, metadata = encrypt_multilayer(SAMPLE_DATA, "correct")
-        with pytest.raises(Exception):  # InvalidTag / InvalidSignature on auth failure
+        with pytest.raises(Exception):  # noqa: B017 — auth failure raises InvalidTag/InvalidSignature (no common base)  # InvalidTag / InvalidSignature on auth failure
             decrypt_multilayer(ciphertext, metadata, "wrong")
 
     def test_ciphertext_changes_with_salt(self):

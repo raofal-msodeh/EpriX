@@ -1,6 +1,5 @@
 """Shared fixtures for the EpriX test suite."""
 
-from pathlib import Path
 
 import pytest
 from starlette.testclient import TestClient
