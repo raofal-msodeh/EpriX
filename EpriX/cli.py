@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 def create_parser() -> argparse.ArgumentParser:
     """Create and configure argument parser."""
-    
+
     parser = argparse.ArgumentParser(
         prog='eprtool',
         description='Secure file packing/unpacking tool with six-layer encryption',
@@ -39,12 +39,12 @@ Security Notes:
   - Use strong passphrases (20+ characters recommended)
         """
     )
-    
+
     parser.add_argument('--verbose', '-v', action='store_true', help='Enable verbose logging')
     parser.add_argument('--quiet', '-q', action='store_true', help='Enable quiet mode (warnings/errors only)')
-    
+
     subparsers = parser.add_subparsers(dest='command', required=True, help='Command to execute')
-    
+
     # Pack command
     pack_parser = subparsers.add_parser('pack', help='Pack a directory into an encrypted .epr file')
     pack_parser.add_argument('--source', '-s', type=Path, required=True, help='Source directory to pack')
@@ -54,7 +54,7 @@ Security Notes:
     pack_parser.add_argument('--follow-symlinks', action='store_true', help='Follow symbolic links')
     pack_parser.add_argument('--preserve-perms', action='store_true', default=True, help='Preserve file permissions (default: true)')
     pack_parser.add_argument('--include-binaries', action='store_true', help='Include binary files (default: text only)')
-    
+
     # Unpack command
     unpack_parser = subparsers.add_parser('unpack', help='Unpack an encrypted .epr file')
     unpack_parser.add_argument('--input', '-i', type=Path, required=True, help='Input .epr file path')
@@ -63,15 +63,15 @@ Security Notes:
     unpack_parser.add_argument('--target', '-t', type=Path, required=True, help='Target directory for unpacked files')
     unpack_parser.add_argument('--dry-run', action='store_true', help='Show what would be done without writing files')
     unpack_parser.add_argument('--overwrite', action='store_true', help='Allow overwriting existing files')
-    
+
     # Server command - الجديد
     server_parser = subparsers.add_parser('server', help='Server operations')
-    server_parser.add_argument('--host', '-h', type=str, default="0.0.0.0", 
+    server_parser.add_argument('--host', type=str, default="0.0.0.0", 
                           help='Host for the server (default: localhost\"0.0.0.0\")')
     server_parser.add_argument('--port', '-p', type=int, default=8000, 
                           help='Port number for the server (default: 8000)')
-                          
-    
+
+
     return parser
 
 
@@ -84,9 +84,9 @@ def main() -> int:
     """
     parser = create_parser()
     args = parser.parse_args()
-    
+
     setup_logging(verbose=args.verbose, quiet=args.quiet)
-    
+
     try:
         if args.command == 'pack':
             pack_directory(
@@ -100,7 +100,7 @@ def main() -> int:
             )
             print(f"✓ Successfully packed {args.source} -> {args.output}")
             return 0
-            
+
         elif args.command == 'unpack':
             unpack_directory(
                 input_file=args.input,
@@ -115,20 +115,20 @@ def main() -> int:
             else:
                 print(f"✓ Successfully unpacked {args.input} -> {args.target}")
             return 0
-        
+
         elif args.command == 'server':  # الجديد
             import uvicorn
             uvicorn.run(app, host=args.host, port=args.port)
             return 0
-        
+
     except KeyboardInterrupt:
         logger.error("Operation cancelled by user")
         return 130
-        
+
     except Exception as e:
         logger.error(f"Error: {e}", exc_info=args.verbose)
         return 1
-    
+
     return 1
 
 

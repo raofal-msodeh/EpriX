@@ -26,6 +26,13 @@ def compress_data(data: bytes, stage: str = "pre-encryption") -> bytes:
         Compressed data
     """
     logger.info(f"Starting {stage} compression on {len(data)} bytes")
+
+    if not data:
+        # Empty input must never be passed to the compressors: Zstandard with
+        # level 22 on zero bytes can raise, and the progress logging below
+        # would divide by zero.
+        logger.info(f"{stage} compression skipped: input is empty")
+        return b""
     
     if stage == "pre-encryption":
         logger.debug("Stage 1: Zstandard compression")
@@ -71,6 +78,9 @@ def decompress_data(data: bytes, stage: str = "post-encryption") -> bytes:
         Decompressed data
     """
     logger.info(f"Starting {stage} decompression on {len(data)} bytes")
+
+    if not data:
+        return b""
     
     if stage == "pre-encryption":
         logger.debug("Stage 1: LZMA decompression")

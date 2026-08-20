@@ -40,7 +40,12 @@ dependencies = [
     "fastapi",
     "uvicorn[standard]",
     "cryptography",
-    # Dependencies from requirements.txt or inferred
+    "python-multipart",
+    "argon2-cffi",
+    "zstandard",
+    "pathspec",
+    "python-magic",
+    "chardet",
 ]
 
 [project.urls]
@@ -55,7 +60,7 @@ eprix = "EpriX.cli:main"
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["EpriX*"]
-exclude = ["EpriX/static/Backup"]
+exclude = []
 
 [tool.setuptools.package-data]
 "EpriX" = ["static/*.html"]
